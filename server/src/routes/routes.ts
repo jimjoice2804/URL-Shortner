@@ -1,13 +1,10 @@
 import { Router } from "express";
+import { createShortUrl } from "@/controllers";
 
 const router = Router();
 
 //put in Database
-router.post("/urls:originalUrl", (req, res) => {
-    const params = req.params.originalUrl;
-
-    res.json({ status: "ok", message: params })
-})
+router.post("/urls", createShortUrl);
 
 //fetch the original url
 //delete the original stored url
