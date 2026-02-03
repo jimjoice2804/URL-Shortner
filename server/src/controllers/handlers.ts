@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import db from "../db/index"
 import { Urls } from '../db/schema';
 import { Request, Response } from 'express';
+import { eq } from "drizzle-orm";
 
 export const createShortUrl = async (req: Request, res: Response,) => {
     try {
@@ -34,5 +35,19 @@ export const createShortUrl = async (req: Request, res: Response,) => {
 }
 
 //deleteShortUrl 
+export const deleteShortUrl = async (req: Request, res: Response) => {
+    try {
+        const shortCode = req.params.shortCode;
+        if (!shortCode || typeof shortCode !== 'string') return res.status(400).json({ error: "Invalid short code!" })
+        await db.delete(Urls).where(eq(Urls.shortCode, shortCode));
+
+        res.status(201).json({
+            message: "Url deletion success"
+        })
+    } catch (error) {
+        console.error("Error deleting short URL:", error);
+        res.status(500).json({ error: 'Failed to delete short URL' });
+    }
+}
 //redirectToUrl
 //getUrlStats
